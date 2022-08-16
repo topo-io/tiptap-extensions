@@ -1,7 +1,8 @@
-import { Node, mergeAttributes, Editor, CommandProps } from "@tiptap/core";
+import { Node, mergeAttributes, CommandProps } from "@tiptap/core";
 import { NodeSelection } from "prosemirror-state";
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
+import _ from 'lodash'
 
 export const ColumnBlock = Node.create({
   name: "columnBlock",
@@ -25,16 +26,25 @@ export const ColumnBlock = Node.create({
       const pos = state.selection.$from
       const where: Predicate = ({ node }) => node.type === state.schema.nodes.columnBlock;
       const firstAncestor = findParentNodeClosestToPos(pos, where);
-      if (!firstAncestor?.pos) {
-        return;
-      }
+
+      // find the content inside of all the columns
+      let nodes: Array<ProseMirrorNode> = []
+      firstAncestor.node.descendants((node, pos, parent) => {
+        if (parent?.type.name === 'column') {
+          nodes.push(node)
+        }
+      })
+      nodes = _.reverse(nodes)
 
       // resolve the position of the first ancestor
       const resolvedPos = tr.doc.resolve(firstAncestor.pos);
       const sel = new NodeSelection(resolvedPos);
 
-      // delete the first ancestor
-      return dispatch(tr.setSelection(sel).deleteSelection());
+      // insert the content inside of all the columns and remove the column layout
+      tr = tr.setSelection(sel)
+      nodes.forEach((node) => tr = tr.insert(firstAncestor.pos, node))
+      tr = tr.deleteSelection()
+      return dispatch(tr);
     }
 
     const setColumns = (n: number, keepContent = true) => ({ state, tr, dispatch }: CommandProps) => {
@@ -47,9 +57,6 @@ export const ColumnBlock = Node.create({
       const pos = state.selection.$from
       const where: Predicate = ({pos}) => doc.resolve(pos).depth <= 0;
       const firstAncestor = findParentNodeClosestToPos(pos, where);
-      if (!firstAncestor?.node || !firstAncestor?.pos) {
-        return
-      }
 
       // create columns and put old content in the first column
       let columnBlock

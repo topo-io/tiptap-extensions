@@ -36,4 +36,5 @@ export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predica
       };
     }
   }
+  throw Error('No parent found')
 };
