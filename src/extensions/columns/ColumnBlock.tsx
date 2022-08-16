@@ -1,5 +1,5 @@
 import { Node, mergeAttributes, CommandProps } from "@tiptap/core";
-import { NodeSelection } from "prosemirror-state";
+import { NodeSelection, TextSelection } from "prosemirror-state";
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
 
@@ -55,19 +55,29 @@ export const ColumnBlock = Node.create({
           return;
       }
 
-      // find the first ancestor
-      const pos = state.selection.$from
+      // find the first ancestor of the beginning of the selection
       const where: Predicate = ({pos}) => doc.resolve(pos).depth <= 0;
-      const firstAncestor = findParentNodeClosestToPos(pos, where);
-      if (firstAncestor === undefined) {
+      const firstAncestorBegin = findParentNodeClosestToPos(state.selection.$from, where);
+      if (firstAncestorBegin === undefined) {
         return;
       }
+
+      // find the first ancestor of the end of the selection
+      const firstAncestorEnd = findParentNodeClosestToPos(state.selection.$to, where);
+      if (firstAncestorEnd === undefined) {
+        return;
+      }
+
+      // create a new selection that take all the nodes
+      const resolvedBeginPos = tr.doc.resolve(firstAncestorBegin.pos);
+      const resolvedEndPos = tr.doc.resolve(firstAncestorEnd.pos + firstAncestorEnd.node.nodeSize);
+      const sel = new TextSelection(resolvedBeginPos, resolvedEndPos);
 
       // create columns and put old content in the first column
       let columnBlock
       if (keepContent) {
-        const content = [firstAncestor.node.toJSON()]
-        const firstColumn = buildColumn({ content });
+        const content = sel.content().toJSON()
+        const firstColumn = buildColumn(content);
         const otherColumns = buildNColumns(n-1);
         columnBlock = buildColumnBlock({ content: [firstColumn, ...otherColumns] })
       } else {
@@ -75,10 +85,6 @@ export const ColumnBlock = Node.create({
         columnBlock = buildColumnBlock({ content: columns })
       }
       const newNode = ProseMirrorNode.fromJSON(schema, columnBlock);
-
-      // resolve the position of the first ancestor
-      const resolvedPos = tr.doc.resolve(firstAncestor.pos);
-      const sel = new NodeSelection(resolvedPos);
 
       // replace the first ancestor
       return dispatch(tr.setSelection(sel).replaceSelectionWith(newNode));
