@@ -1,5 +1,5 @@
 import React from "react";
-import { Node } from "@tiptap/core";
+import { Node, Content } from "@tiptap/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -7,10 +7,10 @@ import { Toolbar } from "./Toolbar";
 import { Popover } from "./Popover";
 import { Column, ColumnBlock } from "../extensions";
 
-import "./Tiptap.scss";
+import "./RichTextEditor.scss";
 
-type TiptapProps = {
-  content?: string;
+type RichTextEditorProps = {
+  content?: Content;
   editable?: boolean;
 };
 
@@ -20,7 +20,7 @@ const Document = Node.create({
   content: "(block|layout)+"
 });
 
-function Tiptap({ content = "", editable = true }: TiptapProps) {
+function RichTextEditor({ content = "", editable = true }: RichTextEditorProps) {
   const editor = useEditor({
     content,
     extensions: [
@@ -43,11 +43,11 @@ function Tiptap({ content = "", editable = true }: TiptapProps) {
         <Popover editor={editor} />
         <EditorContent editor={editor} />
       </div>
-      <h2>Text (tiptap)</h2>
+      <h2>Text</h2>
       <div className="WhiteCard">
         <pre>{editor.getText()}</pre>
       </div>
-      <h2>JSON (tiptap)</h2>
+      <h2>JSON</h2>
       <div className="WhiteCard">
         <pre>{JSON.stringify(editor.getJSON())}</pre>
       </div>
@@ -55,4 +55,4 @@ function Tiptap({ content = "", editable = true }: TiptapProps) {
   );
 }
 
-export { Tiptap };
+export { RichTextEditor };
