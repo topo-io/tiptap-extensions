@@ -6,8 +6,12 @@ import {
   RiStrikethrough,
   RiH1,
   RiH2,
-  RiCodeSSlashLine
+  RiCodeSSlashLine,
+  RiInsertColumnRight
 } from "react-icons/ri";
+import {
+  TbLayoutOff
+} from "react-icons/tb";
 
 import "./Popover.scss";
 
@@ -54,6 +58,18 @@ function Popover({ editor }: PopoverProps) {
       >
         <RiCodeSSlashLine />
       </div>
+    <div
+        className="icon"
+        onClick={() => editor.chain().focus().unsetColumns().run()}
+    >
+        <TbLayoutOff />
+    </div>
+    <div
+        className="icon"
+        onClick={() => editor.chain().focus().setColumns(3).run()}
+    >
+        <RiInsertColumnRight />
+    </div>
     </BubbleMenu>
   );
 }

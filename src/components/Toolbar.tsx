@@ -14,9 +14,13 @@ import {
   RiCodeBoxLine,
   RiDoubleQuotesL,
   RiSeparator,
-  RiLayoutColumnFill,
-  RiLayoutColumnLine
 } from "react-icons/ri";
+import {
+  BsLayoutThreeColumns
+} from "react-icons/bs";
+import {
+  TbLayoutOff
+} from "react-icons/tb";
 
 import "./Toolbar.scss";
 
@@ -120,13 +124,13 @@ function Toolbar({ editor }: ToolbarProps) {
           className="icon"
           onClick={() => editor.chain().focus().unsetColumns().run()}
         >
-          <RiLayoutColumnFill />
+          <TbLayoutOff />
         </div>
         <div
           className="icon"
           onClick={() => editor.chain().focus().insertColumns(3).run()}
         >
-          <RiLayoutColumnLine />
+          <BsLayoutThreeColumns />
         </div>
       </div>
     </div>
