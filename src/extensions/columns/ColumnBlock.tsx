@@ -1,7 +1,7 @@
-import { Node, mergeAttributes } from "@tiptap/core";
-import { NodeSelection } from "prosemirror-state";
-import { Node as NodeModel } from "prosemirror-model";
-import { buildColumn, buildFilledColumnBlock, firstAncestorPos } from "./utils";
+import { Node, mergeAttributes, CommandProps } from "@tiptap/core";
+import { NodeSelection, TextSelection } from "prosemirror-state";
+import { Node as ProseMirrorNode } from "prosemirror-model";
+import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
 
 export const ColumnBlock = Node.create({
   name: "columnBlock",
@@ -16,56 +16,83 @@ export const ColumnBlock = Node.create({
   },
 
   addCommands() {
-    return {
-      insertColumns: (n: number) => ({ state, tr, dispatch }) => {
-        if (!dispatch) {
-            return;
-        }
-        
-        const { schema, selection } = state;
-        const columnBlock = buildFilledColumnBlock({n});
-        const newNode = NodeModel.fromJSON(schema, columnBlock);
-
-        return dispatch(
-          tr.setSelection(selection).replaceSelectionWith(newNode)
-        );
-      },
-      setColumns: (n: number) => ({ state, tr, dispatch }) => {
-        if (!dispatch) {
-            return;
-        }
-        
-        const { schema, doc } = state;
-        const { node, pos, index } = firstAncestorPos(state);
-
-        const type = schema.nodes[this.name];
-        if (!doc.canReplaceWith(index, index, type)) {
-          return false;
-        }
-
-        const resolvedPos = tr.doc.resolve(pos);
-        const sel = new NodeSelection(resolvedPos);
-
-        const firstColumn = buildColumn({content: [node.toJSON()]});
-        const columnBlock = buildFilledColumnBlock({n, firstColumn});
-        const newNode = NodeModel.fromJSON(schema, columnBlock);
-
-        return dispatch(tr.setSelection(sel).replaceSelectionWith(newNode));
-      },
-      unsetColumns: () => ({ state, tr, dispatch }) => {
-        if (!dispatch) {
-            return;
-        }
-        
-        const { node, pos } = firstAncestorPos(state);
-        if (node.type.name !== this.name) {
+    const unsetColumns = () => ({ state, tr, dispatch }: CommandProps) => {
+      if (!dispatch) {
           return;
-        }
-
-        const resolvedPos = tr.doc.resolve(pos);
-        const sel = new NodeSelection(resolvedPos);
-        return dispatch(tr.setSelection(sel).deleteSelection());
       }
+
+      // find the first ancestor
+      const pos = state.selection.$from
+      const where: Predicate = ({ node }) => node.type === state.schema.nodes.columnBlock;
+      const firstAncestor = findParentNodeClosestToPos(pos, where);
+      if (firstAncestor === undefined) {
+        return;
+      }
+
+      // find the content inside of all the columns
+      let nodes: Array<ProseMirrorNode> = []
+      firstAncestor.node.descendants((node, _, parent) => {
+        if (parent?.type.name === 'column') {
+          nodes.push(node)
+        }
+      })
+      nodes = nodes.reverse().filter((node) => node.content.size > 0)
+
+      // resolve the position of the first ancestor
+      const resolvedPos = tr.doc.resolve(firstAncestor.pos);
+      const sel = new NodeSelection(resolvedPos);
+
+      // insert the content inside of all the columns and remove the column layout
+      tr = tr.setSelection(sel)
+      nodes.forEach((node) => tr = tr.insert(firstAncestor.pos, node))
+      tr = tr.deleteSelection()
+      return dispatch(tr);
+    }
+
+    const setColumns = (n: number, keepContent = true) => ({ state, tr, dispatch }: CommandProps) => {
+      const { schema, doc } = state;
+      if (!dispatch) {
+          return;
+      }
+
+      // find the first ancestor of the beginning of the selection
+      const where: Predicate = ({pos}) => doc.resolve(pos).depth <= 0;
+      const firstAncestorBegin = findParentNodeClosestToPos(state.selection.$from, where);
+      if (firstAncestorBegin === undefined) {
+        return;
+      }
+
+      // find the first ancestor of the end of the selection
+      const firstAncestorEnd = findParentNodeClosestToPos(state.selection.$to, where);
+      if (firstAncestorEnd === undefined) {
+        return;
+      }
+
+      // create a new selection that take all the nodes
+      const resolvedBeginPos = tr.doc.resolve(firstAncestorBegin.pos);
+      const resolvedEndPos = tr.doc.resolve(firstAncestorEnd.pos + firstAncestorEnd.node.nodeSize);
+      const sel = new TextSelection(resolvedBeginPos, resolvedEndPos);
+
+      // create columns and put old content in the first column
+      let columnBlock
+      if (keepContent) {
+        const content = sel.content().toJSON()
+        const firstColumn = buildColumn(content);
+        const otherColumns = buildNColumns(n-1);
+        columnBlock = buildColumnBlock({ content: [firstColumn, ...otherColumns] })
+      } else {
+        const columns = buildNColumns(n);
+        columnBlock = buildColumnBlock({ content: columns })
+      }
+      const newNode = ProseMirrorNode.fromJSON(schema, columnBlock);
+
+      // replace the first ancestor
+      return dispatch(tr.setSelection(sel).replaceSelectionWith(newNode));
+    }
+
+    return {
+      unsetColumns,
+      setColumns,
     };
   }
 });

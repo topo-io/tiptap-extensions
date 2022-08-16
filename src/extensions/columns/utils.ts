@@ -1,13 +1,9 @@
-import { EditorState } from "prosemirror-state";
-import { Node } from "prosemirror-model";
+import { Node, ResolvedPos } from "prosemirror-model";
 import { JSONContent } from "@tiptap/core";
 
-export const buildNode = ({type, content}: JSONContent): JSONContent => {
-  if (content) {
-    return { type, content };
-  }
-  return { type };
-};
+const times = <T>(n: number, fn: (i: number) => T): T[] => Array.from({length: n}, (_, i) => fn(i))
+
+export const buildNode = ({type, content}: JSONContent): JSONContent => content ? { type, content } : { type }
 
 export const buildParagraph = ({content}: Partial<JSONContent>) => buildNode({type: "paragraph", content});
 
@@ -15,56 +11,30 @@ export const buildColumn = ({content}: Partial<JSONContent>) => buildNode({type:
 
 export const buildColumnBlock = ({content}: Partial<JSONContent>) => buildNode({type: "columnBlock", content});
 
-interface buildFilledColumnBlockProps {
-    n: number;
-    firstColumn?: JSONContent;
-}
-
-export const buildFilledColumnBlock = ({ n ,firstColumn }: buildFilledColumnBlockProps) => {
-  let k = 0;
-  let columns: Array<JSONContent> = [];
-  if (firstColumn !== undefined) {
-    k = 1;
-    columns = [firstColumn];
-  }
-  for (let i = 0; i < n - k; i++) {
-    const column = buildColumn({content: [buildParagraph({})]});
-    columns.push(column);
-  }
-  const columnBlock = buildColumnBlock({ content: columns });
-  return columnBlock;
+export const buildNColumns = (n: number) => {
+  const content = [buildParagraph({})]
+  const fn = () => buildColumn({ content })
+  return times(n, fn)
 };
 
-interface firstAncestorPosReturnType {
-    pos: number;
-    node: Node;
-    index: number;
+interface PredicateProps {
+  node: Node;
+  pos: number;
 }
 
-export const firstAncestorPos = (state: EditorState) => {
-  const { selection, doc } = state;
-  const { $from } = selection;
-  
-  let firstAncestorPos: firstAncestorPosReturnType = { node: new Node(), pos: -1, index: -1 };
-  doc.forEach((node, pos, index) => {
-    if (pos === $from.pos) {
-      firstAncestorPos = { node, pos, index };
-      return false;
-    }
+export type Predicate = (props: PredicateProps) => boolean
 
-    if (node.childCount === 0) {
-      return false;
+export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predicate) => {
+  for (let i = $pos.depth; i > 0; i--) {
+    const node = $pos.node(i);
+    const pos = i > 0 ? $pos.before(i) : 0
+    if (predicate({ node, pos })) {
+      return {
+        start: $pos.start(i),
+        depth: i,
+        node,
+        pos,
+      };
     }
-
-    if ($from.sharedDepth(pos + 1) > 0) {
-      firstAncestorPos = { node, pos, index };
-    }
-    return false;
-  });
-  
-  if (firstAncestorPos.pos === -1) {
-      throw Error()
   }
-  
-  return firstAncestorPos;
 };
