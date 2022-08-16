@@ -2,7 +2,6 @@ import { Node, mergeAttributes, CommandProps } from "@tiptap/core";
 import { NodeSelection } from "prosemirror-state";
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
-import _ from 'lodash'
 
 export const ColumnBlock = Node.create({
   name: "columnBlock",
@@ -26,15 +25,18 @@ export const ColumnBlock = Node.create({
       const pos = state.selection.$from
       const where: Predicate = ({ node }) => node.type === state.schema.nodes.columnBlock;
       const firstAncestor = findParentNodeClosestToPos(pos, where);
+      if (firstAncestor === undefined) {
+        return;
+      }
 
       // find the content inside of all the columns
       let nodes: Array<ProseMirrorNode> = []
-      firstAncestor.node.descendants((node, pos, parent) => {
+      firstAncestor.node.descendants((node, _, parent) => {
         if (parent?.type.name === 'column') {
           nodes.push(node)
         }
       })
-      nodes = _.reverse(nodes)
+      nodes = nodes.reverse().filter((node) => node.content.size > 0)
 
       // resolve the position of the first ancestor
       const resolvedPos = tr.doc.resolve(firstAncestor.pos);
@@ -57,6 +59,9 @@ export const ColumnBlock = Node.create({
       const pos = state.selection.$from
       const where: Predicate = ({pos}) => doc.resolve(pos).depth <= 0;
       const firstAncestor = findParentNodeClosestToPos(pos, where);
+      if (firstAncestor === undefined) {
+        return;
+      }
 
       // create columns and put old content in the first column
       let columnBlock
@@ -82,7 +87,6 @@ export const ColumnBlock = Node.create({
     return {
       unsetColumns,
       setColumns,
-      insertColumns: (n: number) => setColumns(n, false),
     };
   }
 });

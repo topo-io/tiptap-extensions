@@ -128,7 +128,7 @@ function Toolbar({ editor }: ToolbarProps) {
         </div>
         <div
           className="icon"
-          onClick={() => editor.chain().focus().insertColumns(3).run()}
+          onClick={() => editor.chain().focus().setColumns(3).run()}
         >
           <BsLayoutThreeColumns />
         </div>

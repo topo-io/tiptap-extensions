@@ -1,6 +1,7 @@
 import { Node, ResolvedPos } from "prosemirror-model";
 import { JSONContent } from "@tiptap/core";
-import _ from "lodash";
+
+const times = <T>(n: number, fn: (i: number) => T): T[] => Array.from({length: n}, (_, i) => fn(i))
 
 export const buildNode = ({type, content}: JSONContent): JSONContent => content ? { type, content } : { type }
 
@@ -13,7 +14,7 @@ export const buildColumnBlock = ({content}: Partial<JSONContent>) => buildNode({
 export const buildNColumns = (n: number) => {
   const content = [buildParagraph({})]
   const fn = () => buildColumn({ content })
-  return _.times(n, fn)
+  return times(n, fn)
 };
 
 interface PredicateProps {
@@ -36,5 +37,4 @@ export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predica
       };
     }
   }
-  throw Error('No parent found')
 };

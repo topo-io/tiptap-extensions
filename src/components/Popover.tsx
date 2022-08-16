@@ -7,11 +7,13 @@ import {
   RiH1,
   RiH2,
   RiCodeSSlashLine,
-  RiInsertColumnRight
 } from "react-icons/ri";
 import {
   TbLayoutOff
 } from "react-icons/tb";
+import {
+  BsLayoutThreeColumns
+} from "react-icons/bs";
 
 import "./Popover.scss";
 
@@ -68,7 +70,7 @@ function Popover({ editor }: PopoverProps) {
         className="icon"
         onClick={() => editor.chain().focus().setColumns(3).run()}
     >
-        <RiInsertColumnRight />
+        <BsLayoutThreeColumns />
     </div>
     </BubbleMenu>
   );
