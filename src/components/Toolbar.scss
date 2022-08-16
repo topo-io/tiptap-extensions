@@ -1,0 +1,53 @@
+.ToolbarContainer {
+    background: #ffffff;
+    border-bottom: 2px solid #999999;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    margin: -20px -20px 20px -20px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    &.sticky {
+        border-top: 2px solid transparent;
+        box-shadow: 0px 3px 5px -3px rgba(#333333, 0.5);
+    }
+}
+
+.Toolbar {
+    display: flex;
+
+    .icon {
+        border-radius: 5px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #333333;
+
+        &.disabled {
+            color: rgba(#333333, 0.5);
+            pointer-events: none;
+        }
+    }
+
+    .icon:hover {
+        background: #333333;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .divider {
+        border: none;
+        border-left: 2px solid rgba(#333333, 0.2);
+        margin: 2px 10px;
+    }
+
+    .icon + .icon {
+        margin-left: 4px;
+    }
+}

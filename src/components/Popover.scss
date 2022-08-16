@@ -1,0 +1,32 @@
+.Popover {
+    background: #333333;
+    color: white;
+    border-radius: 8px;
+    padding: 5px;
+    margin: -5px;
+    display: flex;
+
+    .icon {
+        border-radius: 5px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #ffffff;
+
+        &.disabled {
+            pointer-events: none;
+        }
+    }
+
+    .icon:hover {
+        background: #555555;
+        color: #ffffff;
+        cursor: pointer;
+    }
+
+    .icon + .icon {
+        margin-left: 4px;
+    }
+}
