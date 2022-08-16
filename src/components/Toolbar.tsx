@@ -1,7 +1,5 @@
 import React from "react";
-import classNames from "classnames";
 import { Editor } from "@tiptap/react";
-import useInView from "react-cool-inview";
 import {
   RiBold,
   RiItalic,
@@ -27,15 +25,9 @@ type ToolbarProps = {
 };
 
 function Toolbar({ editor }: ToolbarProps) {
-  const { observe, inView } = useInView({
-    rootMargin: "-1px 0px 0px 0px",
-    threshold: [1]
-  });
-
   return (
     <div
-      className={classNames("ToolbarContainer", { sticky: !inView })}
-      ref={observe}
+      className={"ToolbarContainer"}
     >
       <div className="Toolbar">
         <div
