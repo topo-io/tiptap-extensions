@@ -1,0 +1,15 @@
+{
+  "name": "@capsule/column-extension",
+  "version": "1.0.1",
+  "license": "MIT",
+  "main": "dist/bundle.cjs.js",
+  "umd": "dist/bundle.umd.js",
+  "module": "dist/bundle.esm.js",
+  "types": "dist/bundle.es.d.ts",
+  "style": "src/index.css",
+  "peerDependencies": {
+    "@tiptap/core": "^2.0.0-beta.1",
+    "prosemirror-model": "^1.0.0",
+    "prosemirror-state": "^1.0.0"
+  }
+}

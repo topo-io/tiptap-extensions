@@ -5,7 +5,8 @@ import StarterKit from "@tiptap/starter-kit";
 
 import { Toolbar } from "./Toolbar";
 import { Popover } from "./Popover";
-import { Column, ColumnBlock } from "../extensions";
+import { Column, ColumnBlock } from "@capsule/column-extension";
+import "@capsule/column-extension/src/index.css";
 
 import "./RichTextEditor.scss";
 
@@ -17,7 +18,7 @@ type RichTextEditorProps = {
 const Document = Node.create({
   name: "doc",
   topNode: true,
-  content: "(block|layout)+"
+  content: "(block|layout)+",
 });
 
 function RichTextEditor({ content = "", editable = true }: RichTextEditorProps) {

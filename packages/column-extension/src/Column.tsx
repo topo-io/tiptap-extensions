@@ -12,4 +12,3 @@ export const Column = Node.create({
     return ["div", attrs, 0];
   }
 });
-

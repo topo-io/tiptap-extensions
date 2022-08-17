@@ -1,7 +1,18 @@
-import { Node, mergeAttributes, CommandProps } from "@tiptap/core";
+import { Node, mergeAttributes, CommandProps } from '@tiptap/core';
 import { NodeSelection, TextSelection } from "prosemirror-state";
 import { Node as ProseMirrorNode } from "prosemirror-model";
 import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
+
+import { Commands } from "@tiptap/core";
+
+declare module "@tiptap/core" {
+  interface Commands<ReturnType> {
+    columnBlock: {
+      setColumns: (columns: number) => ReturnType;
+      unsetColumns: () => ReturnType;
+    };
+  }
+}
 
 export const ColumnBlock = Node.create({
   name: "columnBlock",
@@ -18,7 +29,7 @@ export const ColumnBlock = Node.create({
   addCommands() {
     const unsetColumns = () => ({ state, tr, dispatch }: CommandProps) => {
       if (!dispatch) {
-          return;
+        return;
       }
 
       // find the first ancestor
@@ -52,7 +63,7 @@ export const ColumnBlock = Node.create({
     const setColumns = (n: number, keepContent = true) => ({ state, tr, dispatch }: CommandProps) => {
       const { schema, doc } = state;
       if (!dispatch) {
-          return;
+        return;
       }
 
       // find the first ancestor of the beginning of the selection
@@ -76,15 +87,17 @@ export const ColumnBlock = Node.create({
       // create columns and put old content in the first column
       let columnBlock
       if (keepContent) {
-        const content = sel.content().toJSON()
+        const content = sel.content().toJSON();
         const firstColumn = buildColumn(content);
-        const otherColumns = buildNColumns(n-1);
-        columnBlock = buildColumnBlock({ content: [firstColumn, ...otherColumns] })
+        const otherColumns = buildNColumns(n - 1);
+        columnBlock = buildColumnBlock({
+          content: [firstColumn, ...otherColumns],
+        });
       } else {
         const columns = buildNColumns(n);
-        columnBlock = buildColumnBlock({ content: columns })
+        columnBlock = buildColumnBlock({ content: columns });
       }
-      const newNode = ProseMirrorNode.fromJSON(schema, columnBlock);
+      const newNode = schema.nodeFromJSON(columnBlock);
 
       // replace the first ancestor
       return dispatch(tr.setSelection(sel).replaceSelectionWith(newNode));
