@@ -1,12 +1,12 @@
 {
-  "name": "@capsule/extensions",
+  "name": "@gocapsule/tiptap-extensions",
   "homepage": "https://leonard-henriquez.github.io/column-extension/",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "@capsule/column-extension": "link:./packages/column-extension",
+    "@gocapsule/column-extension": "link:./packages/column-extension",
     "@tiptap/core": "^2.0.0-beta.1",
     "@tiptap/extension-bubble-menu": "^2.0.0-beta.1",
     "@tiptap/extension-document": "^2.0.0-beta.1",
@@ -25,6 +25,7 @@
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@typescript-eslint/parser": "^5.33.1",
+    "concurrently": "^7.3.0",
     "rollup": "^2.78.0",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-ts": "^3.0.2",
@@ -32,7 +33,9 @@
     "typescript": "4.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently --kill-others 'yarn start:lib' 'yarn start:app'",
+    "start:app": "react-scripts start",
+    "start:lib": "rollup -c rollup.config.js --watch",
     "build:app": "react-scripts build",
     "build:lib": "rollup -c rollup.config.js",
     "test": "react-scripts test --env=jsdom",

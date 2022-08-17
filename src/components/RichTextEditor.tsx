@@ -5,8 +5,8 @@ import StarterKit from "@tiptap/starter-kit";
 
 import { Toolbar } from "./Toolbar";
 import { Popover } from "./Popover";
-import { Column, ColumnBlock } from "@capsule/column-extension";
-import "@capsule/column-extension/src/index.css";
+import { Column, ColumnBlock } from "@gocapsule/column-extension";
+import "@gocapsule/column-extension/src/index.css";
 
 import "./RichTextEditor.scss";
 

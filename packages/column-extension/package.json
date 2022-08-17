@@ -1,6 +1,6 @@
 {
-  "name": "@capsule/column-extension",
-  "version": "1.0.1",
+  "name": "@gocapsule/column-extension",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "dist/bundle.cjs.js",
   "umd": "dist/bundle.umd.js",
