@@ -28,23 +28,16 @@ Add the extension to your editor
 ```javascript
 import { Node, Editor } from "@tiptap/core";
 import StarterKit from '@tiptap/starter-kit';
-import { Column, ColumnBlock } from "@gocapsule/column-extension";
+import { ColumnExtension } from "@gocapsule/column-extension";
+// don't forget to add style to see the columns
 import "@gocapsule/column-extension/src/index.css";
-
-// You need to override the Document node to allow the new kind of node introduced by this extension
-const Document = Node.create({
-  name: "doc",
-  topNode: true,
-  content: "(block|layout)+",
-});
 
 new Editor({
   element: document.querySelector('.element'),
   extensions: [
-      Document,
-      StarterKit.configure({ document: false }),
-      Column,
-      ColumnBlock
+    // override Document to allow columns
+    StarterKit.configure({ document: false }),
+    ColumnExtension,
   ],
   content: '<p>Hello World!</p>',
 });
