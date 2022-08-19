@@ -1,13 +1,11 @@
 import React from "react";
-import { Node, Content } from "@tiptap/core";
+import { Content } from "@tiptap/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-
 import { Toolbar } from "./Toolbar";
 import { Popover } from "./Popover";
-import { Column, ColumnBlock } from "@gocapsule/column-extension";
+import { ColumnExtension } from "@gocapsule/column-extension";
 import "@gocapsule/column-extension/src/index.css";
-
 import "./RichTextEditor.scss";
 
 type RichTextEditorProps = {
@@ -15,22 +13,14 @@ type RichTextEditorProps = {
   editable?: boolean;
 };
 
-const Document = Node.create({
-  name: "doc",
-  topNode: true,
-  content: "(block|layout)+",
-});
-
 function RichTextEditor({ content = "", editable = true }: RichTextEditorProps) {
   const editor = useEditor({
     content,
     extensions: [
-      Document,
       StarterKit.configure({ document: false }),
-      Column,
-      ColumnBlock
+      ColumnExtension,
     ],
-    editable
+    editable,
   });
 
   if (!editor) {
