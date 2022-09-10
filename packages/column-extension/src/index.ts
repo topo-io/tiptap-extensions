@@ -16,9 +16,9 @@ export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
   addExtensions() {
     const extensions = []
 
-    if (this.options.document !== false) {
-      extensions.push(Document);
-    }
+    // if (this.options.document !== false) {
+    //   extensions.push(Document);
+    // }
 
     if (this.options.column !== false) {
       extensions.push(Column);
@@ -34,3 +34,5 @@ export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
 });
 
 export { Column, ColumnBlock, Document };
+
+export default ColumnExtension;

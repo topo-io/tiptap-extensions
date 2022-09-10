@@ -1,0 +1,74 @@
+import { ResolvedPos, Node } from 'prosemirror-model';
+import { Selection, TextSelection } from 'prosemirror-state';
+import { Predicate, findParentNodeClosestToPos } from './utils';
+import { Column } from './Column';
+import { ColumnBlock } from './ColumnBlock';
+
+export class ColumnSelection extends Selection {
+  constructor(selection: Selection) {
+    const { $from, $to } = selection;
+    super($from, $to);
+    this._$from = $from;
+    this._$to = $to;
+  }
+
+  _$from: ResolvedPos;
+  _$to: ResolvedPos;
+
+  get $from() {
+    return this._$from;
+  }
+
+  get $to() {
+    return this._$to;
+  }
+
+  map() {
+    return this;
+  }
+
+  content() {
+    return this.$from.doc.slice(this.from, this.to, true);
+  }
+
+  eq(other: Selection): boolean {
+    return other instanceof ColumnSelection && other.anchor == this.anchor;
+  }
+
+  toJSON(): any {
+    return { type: "column", from: this.from, to: this.to };
+  }
+
+  expandSelection(doc: Node) {
+    // find the first ancestor of the beginning of the selection
+    const where: Predicate = ({ pos, node }) => {
+      if (node.type.name === Column.name) {
+        return true;
+      }
+      // return doc.resolve(pos).depth <= 0;
+      return doc.resolve(pos).depth <= 0;
+    };
+    this._$from = findParentNodeClosestToPos(this.$from, where);
+
+    // find the first ancestor of the end of the selection
+    this._$to = findParentNodeClosestToPos(this.$to, where);
+
+    if (this.getFirstNode()?.type.name === ColumnBlock.name) {
+      const offset = 2;
+      this._$from = doc.resolve(this.$from.pos + offset);
+      this._$to = doc.resolve(this.$to.pos + offset);
+    }
+  }
+
+  /// Create a node selection from non-resolved positions.
+  static create(doc: Node, from: number, to: number) {
+    const $from = doc.resolve(from);
+    const $to = doc.resolve(to);
+    const selection = new TextSelection($from, $to);
+    return new ColumnSelection(selection);
+  }
+
+  getFirstNode() {
+    return this.content().content.firstChild;
+  }
+}

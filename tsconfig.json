@@ -1,8 +1,7 @@
 {
   "include": [
-    "./src/**/*",
-    "./packages/**/*"
   ],
+  "outDir": "./dist",
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
@@ -20,7 +19,6 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
     "isolatedModules": true,
   }
 }

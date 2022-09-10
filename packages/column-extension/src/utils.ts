@@ -20,21 +20,25 @@ export const buildNColumns = (n: number) => {
 interface PredicateProps {
   node: Node;
   pos: number;
+  start: number;
 }
 
 export type Predicate = (props: PredicateProps) => boolean
 
-export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predicate) => {
+export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predicate): ResolvedPos => {
   for (let i = $pos.depth; i > 0; i--) {
     const node = $pos.node(i);
     const pos = i > 0 ? $pos.before(i) : 0
-    if (predicate({ node, pos })) {
-      return {
-        start: $pos.start(i),
-        depth: i,
-        node,
-        pos,
-      };
+    const start = $pos.start(i);
+    if (predicate({ node, pos, start })) {
+      return node.resolve(start);
+      // return {
+      //   start: $pos.start(i),
+      //   depth: i,
+      //   node,
+      //   pos,
+      // };
     }
   }
+  throw Error('no ancestor found')
 };

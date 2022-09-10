@@ -1,0 +1,85 @@
+@mixin white-card {
+    background: #ffffff;
+    border: 2px solid #999999;
+    border-radius: 10px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    background: #eaeaea;
+    font-family: 'Inter', sans-serif;
+    margin: 50px;
+    color: #111111;
+}
+
+#Wrapper {
+    max-width: 1280px;
+    margin: 0 auto;
+
+    > nav {
+        @include white-card;
+
+        margin-bottom: 50px;
+        padding: 18px 20px;
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            display: inline-block;
+            line-height: 2.5;
+            margin-right: 5px;
+        }
+
+        a {
+            border: 2px solid transparent;
+            border-radius: 5px;
+            padding: 5px;
+            color: #005D71;
+            text-decoration: none;
+            font-weight: bold;
+
+            &.selected {
+                background: #007992;
+                color: #ffffff;
+                cursor: default;
+            }
+        }
+
+        a:hover:not(.selected) {
+            border: 2px solid #007992;
+        }
+    }
+}
+
+.WhiteCard {
+    @include white-card;
+}
+
+.WhiteCard + h2 {
+    margin: 20px 20px 5px;
+}
+
+.WhiteCard + .WhiteCard {
+    margin-top: 20px;
+}
+
+.WhiteCard > pre {
+    min-height: 15px;
+    margin: 0;
+    white-space: pre-wrap;
+}
