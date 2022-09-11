@@ -13,22 +13,21 @@
   },
   "types": "dist/bundle.es.d.ts",
   "style": "src/index.css",
-  "peerDependencies": {
-    "@tiptap/core": "^2.0.0-beta.1",
-    "prosemirror-model": "^1.0.0",
-    "prosemirror-state": "^1.0.0"
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "pnpm build --watch",
+    "build": "vite build"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^2.0.1",
     "vite": "^3.0.9",
     "vite-plugin-dts": "^1.4.1"
   },
-  "scripts": {
-    "start": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "files": [
-    "dist"
-  ]
+  "peerDependencies": {
+    "@tiptap/core": "^2.0.0-beta.1",
+    "prosemirror-model": "^1.0.0",
+    "prosemirror-state": "^1.0.0"
+  }
 }

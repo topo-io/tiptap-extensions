@@ -1,0 +1,64 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/internal-regex": "^@gocapsule/",
+    "import/resolver": {
+      "typescript": {
+        "project": [
+          "packages/*/tsconfig.json",
+          "apps/*/tsconfig.json"
+        ]
+      }
+    }
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "dist",
+    "*.config.js",
+    "*.setup.js"
+  ],
+  "rules": {
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  },
+  "overrides": [
+    {
+      "files": [
+        "packages/**/*"
+      ],
+      "extends": [
+        "plugin:import/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:jsx-a11y/recommended"
+      ]
+    }
+  ]
+}

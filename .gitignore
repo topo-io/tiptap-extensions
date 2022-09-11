@@ -1,4 +1,54 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/tmp
+*.tsbuildinfo
+.turbo
+.next
+build
+dist
+
+# Dependencies
 node_modules
+
+# IDEs and editors
+/.idea
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Misc
+/coverage
+/typings
+dbml
 *.log
-**/dist
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Env
+!.env.example
 .env
+.env.*
+
+# Backend
+apps/backend/prisma/*.db
+apps/backend/coverage/
+apps/backend/prisma/migrations/dev/
+
+# Deployment
+Dockerrun.aws.json
+deployment/*
+!deployment/.ebextensions/
+!deployment/Dockerrun.aws.json.template
+!deployment/deploy.sh
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

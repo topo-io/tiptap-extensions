@@ -4,6 +4,16 @@ import { Column } from "./Column";
 import { ColumnBlock } from "./ColumnBlock";
 import { Document } from "./Document";
 
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    columnBlock: {
+      setColumns: (columns: number) => ReturnType;
+      unsetColumns: () => ReturnType;
+    };
+  }
+}
+
+
 interface ColumnExtensionOptions {
   document?: boolean;
   column?: boolean;

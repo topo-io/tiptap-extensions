@@ -5,15 +5,6 @@ import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNode
 import { Column } from './Column';
 import { ColumnSelection } from './ColumnSelection';
 
-declare module "@tiptap/core" {
-  interface Commands<ReturnType> {
-    columnBlock: {
-      setColumns: (columns: number) => ReturnType;
-      unsetColumns: () => ReturnType;
-    };
-  }
-}
-
 export interface ColumnBlockOptions {
   nestedColumns: boolean;
   columnType: Node;
