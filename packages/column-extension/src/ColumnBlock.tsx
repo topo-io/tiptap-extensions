@@ -1,9 +1,26 @@
 import { Node, mergeAttributes, CommandProps } from '@tiptap/core';
-import { NodeSelection, Selection, TextSelection } from "prosemirror-state";
-import { Node as ProseMirrorNode, NodeType } from "prosemirror-model";
-import { buildColumn, buildNColumns, buildColumnBlock, Predicate, findParentNodeClosestToPos } from "./utils";
+import { NodeSelection, Selection, TextSelection } from 'prosemirror-state';
+import { Node as ProseMirrorNode, NodeType } from 'prosemirror-model';
+import {
+  buildColumn,
+  buildNColumns,
+  buildColumnBlock,
+  Predicate,
+  findParentNodeClosestToPos,
+} from './utils';
 import { Column } from './Column';
 import { ColumnSelection } from './ColumnSelection';
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    columnBlock: {
+      setColumns: (columns: number) => ReturnType;
+      insertColumns: (columns: number) => ReturnType;
+      unsetColumns: () => ReturnType;
+    };
+  }
+}
+
 
 export interface ColumnBlockOptions {
   nestedColumns: boolean;
@@ -11,9 +28,9 @@ export interface ColumnBlockOptions {
 }
 
 export const ColumnBlock = Node.create<ColumnBlockOptions>({
-  name: "columnBlock",
-  group: "block",
-  content: "column{2,}",
+  name: 'columnBlock',
+  group: 'block',
+  content: 'column{2,}',
   isolating: true,
   selectable: true,
 
@@ -25,8 +42,8 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const attrs = mergeAttributes(HTMLAttributes, { class: "column-block" });
-    return ["div", attrs, 0];
+    const attrs = mergeAttributes(HTMLAttributes, { class: 'column-block' });
+    return ['div', attrs, 0];
   },
 
   addCommands() {
@@ -103,9 +120,9 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
           //   // return;
           // }
 
-          const { openStart, openEnd } = sel.content()
+          const { openStart, openEnd } = sel.content();
           if (openStart !== openEnd) {
-            console.warn('failed depth check')
+            console.warn('failed depth check');
             return;
           }
 
@@ -149,9 +166,9 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
             }
 
             return true;
-          }
+          };
           if (!canAcceptColumnBlockChild(parent)) {
-            console.warn("content not allowed");
+            console.warn('content not allowed');
             return;
           }
 

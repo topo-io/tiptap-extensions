@@ -1,25 +1,22 @@
-import React from "react";
-import { Content } from "@tiptap/core";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { Toolbar } from "./Toolbar";
-import { Popover } from "./Popover";
-import ColumnExtension from "@gocapsule/column-extension";
-import "@gocapsule/column-extension/src/index.css";
-import "./RichTextEditor.scss";
+import React, { FC } from 'react';
+import { Content } from '@tiptap/core';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Toolbar } from './Toolbar';
+import { Popover } from './Popover';
+import ColumnExtension from '@gocapsule/column-extension';
+import '@gocapsule/column-extension/src/index.css';
+import './RichTextEditor.scss';
 
 type RichTextEditorProps = {
   content?: Content;
   editable?: boolean;
 };
 
-function RichTextEditor({ content = "", editable = true }: RichTextEditorProps) {
+const RichTextEditor: FC<RichTextEditorProps> = ({ content = '', editable = true }) => {
   const editor = useEditor({
     content,
-    extensions: [
-      StarterKit,
-      ColumnExtension,
-    ],
+    extensions: [StarterKit, ColumnExtension],
     editable,
   });
 
@@ -44,6 +41,6 @@ function RichTextEditor({ content = "", editable = true }: RichTextEditorProps) 
       </div>
     </>
   );
-}
+};
 
 export { RichTextEditor };

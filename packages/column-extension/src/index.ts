@@ -1,18 +1,8 @@
-import { Extension } from "@tiptap/core";
+import { Extension } from '@tiptap/core';
 
-import { Column } from "./Column";
-import { ColumnBlock } from "./ColumnBlock";
-import { Document } from "./Document";
-
-declare module '@tiptap/core' {
-  interface Commands<ReturnType> {
-    columnBlock: {
-      setColumns: (columns: number) => ReturnType;
-      unsetColumns: () => ReturnType;
-    };
-  }
-}
-
+import { Column } from './Column';
+import { ColumnBlock } from './ColumnBlock';
+import { Document } from './Document';
 
 interface ColumnExtensionOptions {
   document?: boolean;
@@ -21,10 +11,10 @@ interface ColumnExtensionOptions {
 }
 
 export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
-  name: "columnExtension",
+  name: 'columnExtension',
 
   addExtensions() {
-    const extensions = []
+    const extensions = [];
 
     // if (this.options.document !== false) {
     //   extensions.push(Document);
@@ -39,8 +29,7 @@ export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
     }
 
     return extensions;
-  }
-
+  },
 });
 
 export { Column, ColumnBlock, Document };

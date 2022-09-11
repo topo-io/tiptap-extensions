@@ -1,45 +1,25 @@
-import React from "react";
-import { BubbleMenu, Editor } from "@tiptap/react";
-import {
-  RiBold,
-  RiItalic,
-  RiStrikethrough,
-  RiH1,
-  RiH2,
-  RiCodeSSlashLine,
-} from "react-icons/ri";
-import {
-  TbLayoutOff
-} from "react-icons/tb";
-import {
-  BsLayoutThreeColumns
-} from "react-icons/bs";
+import React, { FC } from 'react';
+import { BubbleMenu, Editor } from '@tiptap/react';
+import { RiBold, RiItalic, RiStrikethrough, RiH1, RiH2, RiCodeSSlashLine } from 'react-icons/ri';
+import { TbLayoutOff } from 'react-icons/tb';
+import { BsLayoutThreeColumns } from 'react-icons/bs';
 
-import "./Popover.scss";
+import './Popover.scss';
 
 type PopoverProps = {
   editor: Editor;
 };
 
-function Popover({ editor }: PopoverProps) {
+const Popover: FC<PopoverProps> = ({ editor }) => {
   return (
     <BubbleMenu className="Popover" editor={editor}>
-      <div
-        className="icon"
-        onClick={() => editor.chain().focus().toggleBold().run()}
-      >
+      <div className="icon" onClick={() => editor.chain().focus().toggleBold().run()}>
         <RiBold />
       </div>
-      <div
-        className="icon"
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-      >
+      <div className="icon" onClick={() => editor.chain().focus().toggleItalic().run()}>
         <RiItalic />
       </div>
-      <div
-        className="icon"
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-      >
+      <div className="icon" onClick={() => editor.chain().focus().toggleStrike().run()}>
         <RiStrikethrough />
       </div>
       <div
@@ -54,26 +34,17 @@ function Popover({ editor }: PopoverProps) {
       >
         <RiH2 />
       </div>
-      <div
-        className="icon"
-        onClick={() => editor.chain().focus().toggleCode().run()}
-      >
+      <div className="icon" onClick={() => editor.chain().focus().toggleCode().run()}>
         <RiCodeSSlashLine />
       </div>
-    <div
-        className="icon"
-        onClick={() => editor.chain().focus().unsetColumns().run()}
-    >
+      <div className="icon" onClick={() => editor.chain().focus().unsetColumns().run()}>
         <TbLayoutOff />
-    </div>
-    <div
-        className="icon"
-        onClick={() => editor.chain().focus().setColumns(3).run()}
-    >
+      </div>
+      <div className="icon" onClick={() => editor.chain().focus().setColumns(3).run()}>
         <BsLayoutThreeColumns />
-    </div>
+      </div>
     </BubbleMenu>
   );
-}
+};
 
 export { Popover };
