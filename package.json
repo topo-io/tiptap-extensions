@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "pnpm turbo run start",
+    "dev": "pnpm turbo run dev",
     "build": "pnpm turbo run build"
   },
   "devDependencies": {

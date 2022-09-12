@@ -1,19 +1,23 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
     "baseUrl": ".",
     "outDir": "dist",
     "declaration": true,
     "declarationDir": "dist",
-    "noEmit": false
+    "noEmit": false,
+    "rootDir": "src",
+    "allowJs": true
   },
   "files": [],
   "include": [
-    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
-    "dist"
-  ],
+    "dist",
+    "*.config.js",
+    "*.json"
+  ]
 }

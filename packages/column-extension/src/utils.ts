@@ -1,20 +1,25 @@
-import { Node, ResolvedPos } from "prosemirror-model";
-import { JSONContent } from "@tiptap/core";
+import { Node, ResolvedPos } from 'prosemirror-model';
+import { JSONContent } from '@tiptap/core';
 
-const times = <T>(n: number, fn: (i: number) => T): T[] => Array.from({length: n}, (_, i) => fn(i))
+const times = <T>(n: number, fn: (i: number) => T): T[] =>
+  Array.from({ length: n }, (_, i) => fn(i));
 
-export const buildNode = ({type, content}: JSONContent): JSONContent => content ? { type, content } : { type }
+export const buildNode = ({ type, content }: JSONContent): JSONContent =>
+  content ? { type, content } : { type };
 
-export const buildParagraph = ({content}: Partial<JSONContent>) => buildNode({type: "paragraph", content});
+export const buildParagraph = ({ content }: Partial<JSONContent>) =>
+  buildNode({ type: 'paragraph', content });
 
-export const buildColumn = ({content}: Partial<JSONContent>) => buildNode({type: "column", content});
+export const buildColumn = ({ content }: Partial<JSONContent>) =>
+  buildNode({ type: 'column', content });
 
-export const buildColumnBlock = ({content}: Partial<JSONContent>) => buildNode({type: "columnBlock", content});
+export const buildColumnBlock = ({ content }: Partial<JSONContent>) =>
+  buildNode({ type: 'columnBlock', content });
 
 export const buildNColumns = (n: number) => {
-  const content = [buildParagraph({})]
-  const fn = () => buildColumn({ content })
-  return times(n, fn)
+  const content = [buildParagraph({})];
+  const fn = () => buildColumn({ content });
+  return times(n, fn);
 };
 
 interface PredicateProps {
@@ -23,22 +28,21 @@ interface PredicateProps {
   start: number;
 }
 
-export type Predicate = (props: PredicateProps) => boolean
+export type Predicate = (props: PredicateProps) => boolean;
 
-export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predicate): ResolvedPos => {
+export const findParentNodeClosestToPos = ($pos: ResolvedPos, predicate: Predicate) => {
   for (let i = $pos.depth; i > 0; i--) {
     const node = $pos.node(i);
-    const pos = i > 0 ? $pos.before(i) : 0
+    const pos = i > 0 ? $pos.before(i) : 0;
     const start = $pos.start(i);
     if (predicate({ node, pos, start })) {
-      return node.resolve(start);
-      // return {
-      //   start: $pos.start(i),
-      //   depth: i,
-      //   node,
-      //   pos,
-      // };
+      return {
+        start,
+        depth: i,
+        node,
+        pos,
+      };
     }
   }
-  throw Error('no ancestor found')
+  throw Error('no ancestor found');
 };

@@ -1,10 +1,8 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { BubbleMenu, Editor } from '@tiptap/react';
 import { RiBold, RiItalic, RiStrikethrough, RiH1, RiH2, RiCodeSSlashLine } from 'react-icons/ri';
 import { TbLayoutOff } from 'react-icons/tb';
 import { BsLayoutThreeColumns } from 'react-icons/bs';
-
-import './Popover.scss';
 
 type PopoverProps = {
   editor: Editor;

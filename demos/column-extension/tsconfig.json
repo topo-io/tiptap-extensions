@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
@@ -9,11 +8,8 @@
       "dom.iterable",
       "esnext"
     ],
-    "jsx": "react-jsx",
-    "noEmit": true,
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext"
+    "jsx": "preserve",
+    "noEmit": true
   },
   "files": [],
   "include": [
@@ -21,7 +17,7 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "react-app-env.d.ts"
+    "next-env.d.ts"
   ],
   "exclude": [
     "dist",

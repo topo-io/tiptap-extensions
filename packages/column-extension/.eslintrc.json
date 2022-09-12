@@ -1,0 +1,6 @@
+{
+  "parserOptions": {
+    "tsconfigRootDir": "packages/column-extension",
+    "project": "tsconfig.json"
+  }
+}

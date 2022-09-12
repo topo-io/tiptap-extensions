@@ -1,4 +1,3 @@
-import React from 'react';
 import { Editor } from '@tiptap/react';
 import {
   RiBold,
@@ -17,8 +16,6 @@ import {
 } from 'react-icons/ri';
 import { BsLayoutThreeColumns } from 'react-icons/bs';
 import { TbLayoutOff } from 'react-icons/tb';
-
-import './Toolbar.scss';
 
 type ToolbarProps = {
   editor: Editor;

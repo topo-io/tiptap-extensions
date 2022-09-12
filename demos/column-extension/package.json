@@ -1,0 +1,30 @@
+{
+  "name": "column-extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@gocapsule/column-extension": "workspace:*",
+    "@tiptap/core": "^2.0.0-beta.193",
+    "@tiptap/react": "2.0.0-beta.194",
+    "@tiptap/starter-kit": "2.0.0-beta.194",
+    "next": "12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.13",
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
+    "eslint": "^7.11.0",
+    "eslint-config-next": "^12.3.0",
+    "sass": "^1.54.9",
+    "typescript": "4.4.2"
+  }
+}

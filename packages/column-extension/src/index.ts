@@ -4,7 +4,7 @@ import { Column } from './Column';
 import { ColumnBlock } from './ColumnBlock';
 import { Document } from './Document';
 
-interface ColumnExtensionOptions {
+export interface ColumnExtensionOptions {
   document?: boolean;
   column?: boolean;
   columnBlock?: boolean;

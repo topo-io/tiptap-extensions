@@ -4,6 +4,10 @@ import { Predicate, findParentNodeClosestToPos } from './utils';
 import { Column } from './Column';
 import { ColumnBlock } from './ColumnBlock';
 
+type Mutable<T> = {
+  -readonly [k in keyof T]: T[k];
+};
+
 export class ColumnSelection extends Selection {
   constructor(selection: Selection) {
     const { $from, $to } = selection;
@@ -36,7 +40,7 @@ export class ColumnSelection extends Selection {
   }
 
   toJSON(): any {
-    return { type: "column", from: this.from, to: this.to };
+    return { type: 'column', from: this.from, to: this.to };
   }
 
   expandSelection(doc: Node) {
@@ -45,19 +49,24 @@ export class ColumnSelection extends Selection {
       if (node.type.name === Column.name) {
         return true;
       }
-      // return doc.resolve(pos).depth <= 0;
       return doc.resolve(pos).depth <= 0;
     };
-    this._$from = findParentNodeClosestToPos(this.$from, where);
+    const { pos: fromPos } = findParentNodeClosestToPos(this.$from, where);
+    this._$from = doc.resolve(fromPos);
 
     // find the first ancestor of the end of the selection
-    this._$to = findParentNodeClosestToPos(this.$to, where);
+    const { pos: toPos, node: toNode } = findParentNodeClosestToPos(this.$to, where);
+    this._$to = doc.resolve(toPos + toNode.nodeSize);
 
     if (this.getFirstNode()?.type.name === ColumnBlock.name) {
       const offset = 2;
       this._$from = doc.resolve(this.$from.pos + offset);
       this._$to = doc.resolve(this.$to.pos + offset);
     }
+
+    const mutableThis = this as Mutable<ColumnSelection>;
+    mutableThis.$anchor = this._$from;
+    mutableThis.$head = this._$to;
   }
 
   /// Create a node selection from non-resolved positions.

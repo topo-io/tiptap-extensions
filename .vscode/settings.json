@@ -1,0 +1,32 @@
+{
+  "search.exclude": {
+    "pnpm-lock.yaml": true,
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/tmp": true,
+    "**/log": true,
+    "*.log": true
+  },
+  "files.exclude": {
+    "**/.turbo": true,
+    "**/dist": false
+  },
+  "eslint.nodePath": "node_modules/.bin",
+  "eslint.packageManager": "pnpm",
+  "prettier.prettierPath": "node_modules/prettier",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "modifications",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+  },
+}
