@@ -1,5 +1,5 @@
-import { Node, mergeAttributes, CommandProps, Commands } from '@tiptap/core';
-import { NodeSelection, Selection, TextSelection } from 'prosemirror-state';
+import { Node, mergeAttributes, CommandProps } from '@tiptap/core';
+import { NodeSelection } from 'prosemirror-state';
 import { Node as ProseMirrorNode, NodeType } from 'prosemirror-model';
 import {
   buildColumn,
@@ -35,7 +35,7 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
 
   addOptions() {
     return {
-      nestedColumns: true,
+      nestedColumns: false,
       columnType: Column,
     };
   },
@@ -48,7 +48,7 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
   addCommands() {
     const unsetColumns =
       () =>
-      ({ state, tr, dispatch }: CommandProps) => {
+      ({ tr, dispatch }: CommandProps) => {
         try {
           if (!dispatch) {
             return;
@@ -56,9 +56,8 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
 
           // find the first ancestor
           const pos = tr.selection.$from;
-          const where: Predicate = ({ node, start }) => {
+          const where: Predicate = ({ node }) => {
             if (!this.options.nestedColumns && node.type == this.type) {
-              console.log('found column block', node);
               return true;
             }
             return node.type == this.type;
@@ -93,9 +92,8 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
 
     const setColumns =
       (n: number, keepContent = true) =>
-      ({ state, tr, dispatch }: CommandProps) => {
+      ({ tr, dispatch }: CommandProps) => {
         try {
-          const { schema } = state;
           const { doc, selection } = tr;
           if (!dispatch) {
             return;
@@ -114,7 +112,6 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
           let columnBlock;
           if (keepContent) {
             const content = sel.content().toJSON();
-            console.log(content);
             const firstColumn = buildColumn(content);
             const otherColumns = buildNColumns(n - 1);
             columnBlock = buildColumnBlock({
@@ -124,7 +121,7 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
             const columns = buildNColumns(n);
             columnBlock = buildColumnBlock({ content: columns });
           }
-          const newNode = schema.nodeFromJSON(columnBlock);
+          const newNode = doc.type.schema.nodeFromJSON(columnBlock);
           if (newNode === null) {
             return;
           }

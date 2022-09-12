@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Content, Extension } from '@tiptap/core';
+import { Content } from '@tiptap/core';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Toolbar } from './Toolbar';
@@ -14,7 +14,7 @@ type RichTextEditorProps = {
 const RichTextEditor: FC<RichTextEditorProps> = ({ content = '', editable = true }) => {
   const editor = useEditor({
     content,
-    extensions: [StarterKit, ColumnExtension as unknown as Extension],
+    extensions: [StarterKit, ColumnExtension],
     editable,
   });
 

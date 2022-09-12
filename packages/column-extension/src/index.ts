@@ -2,10 +2,8 @@ import { Extension } from '@tiptap/core';
 
 import { Column } from './Column';
 import { ColumnBlock } from './ColumnBlock';
-import { Document } from './Document';
 
 export interface ColumnExtensionOptions {
-  document?: boolean;
   column?: boolean;
   columnBlock?: boolean;
 }
@@ -15,10 +13,6 @@ export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
 
   addExtensions() {
     const extensions = [];
-
-    // if (this.options.document !== false) {
-    //   extensions.push(Document);
-    // }
 
     if (this.options.column !== false) {
       extensions.push(Column);
@@ -32,6 +26,6 @@ export const ColumnExtension = Extension.create<ColumnExtensionOptions>({
   },
 });
 
-export { Column, ColumnBlock, Document };
+export { Column, ColumnBlock };
 
 export default ColumnExtension;
