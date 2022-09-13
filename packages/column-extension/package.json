@@ -1,15 +1,17 @@
 {
   "name": "@gocapsule/column-extension",
-  "version": "0.1.2",
+  "version": "1.0.0-beta-2",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/bundle.cjs.js",
+  "umd": "dist/bundle.umd.js",
+  "module": "dist/bundle.esm.js",
+  "types": "dist/bundle.es.d.ts",
   "style": "src/index.css",
   "files": [
     "dist"
   ],
   "scripts": {
-    "dev": "pnpm tsc --watch",
+    "dev": "vite build --watch",
     "build": "vite build"
   },
   "devDependencies": {
