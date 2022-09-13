@@ -143,7 +143,8 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
             return;
           }
 
-          tr = tr.replaceRangeWith(sel.from, sel.to, newNode);
+          tr = tr.setSelection(sel);
+          tr = tr.replaceSelectionWith(newNode, false);
           return dispatch(tr);
         } catch (error) {
           console.error(error);

@@ -1,5 +1,5 @@
 import { ResolvedPos, Node } from 'prosemirror-model';
-import { Selection, TextSelection } from 'prosemirror-state';
+import { Selection, SelectionRange, TextSelection } from 'prosemirror-state';
 import { Predicate, findParentNodeClosestToPos } from './utils';
 import { Column } from './Column';
 import { ColumnBlock } from './ColumnBlock';
@@ -67,6 +67,7 @@ export class ColumnSelection extends Selection {
     const mutableThis = this as Mutable<ColumnSelection>;
     mutableThis.$anchor = this._$from;
     mutableThis.$head = this._$to;
+    mutableThis.ranges = [new SelectionRange(this._$from, this._$to)];
   }
 
   /// Create a node selection from non-resolved positions.
