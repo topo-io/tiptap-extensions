@@ -13,7 +13,7 @@ Here is a quick preview of the features:
 [Column extension for Tiptap - Watch Video](https://www.loom.com/share/019ec6d12dc74334aae7e41fb57eb0a0)
 
 You can try it here:
-<https://codesandbox.io/p/github/leonard-henriquez/column-extension/main>
+<https://codesandbox.io/p/github/GoCapsule/tiptap-extensions/main>
 
 ### Install
 
