@@ -28,7 +28,7 @@ Add the extension to your editor
 ```javascript
 import { Node, Editor } from "@tiptap/core";
 import StarterKit from '@tiptap/starter-kit';
-import ColumnExtension from "@gocapsule/column-extension";
+import { ColumnExtension } from "@gocapsule/column-extension";
 // don't forget to add style to see the columns
 import "@gocapsule/column-extension/src/index.css";
 
