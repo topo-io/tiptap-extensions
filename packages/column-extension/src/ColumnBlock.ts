@@ -1,15 +1,12 @@
-import { Node, mergeAttributes, CommandProps } from '@tiptap/core';
+import { Node, mergeAttributes } from '@tiptap/core';
+import type { CommandProps } from '@tiptap/core';
+import type { Node as ProseMirrorNode, NodeType } from 'prosemirror-model';
 import { NodeSelection } from 'prosemirror-state';
-import { Node as ProseMirrorNode, NodeType } from 'prosemirror-model';
-import {
-  buildColumn,
-  buildNColumns,
-  buildColumnBlock,
-  Predicate,
-  findParentNodeClosestToPos,
-} from './utils';
+
 import { Column } from './Column';
 import { ColumnSelection } from './ColumnSelection';
+import { buildColumn, buildNColumns, buildColumnBlock, findParentNodeClosestToPos } from './utils';
+import type { Predicate } from './utils';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -91,11 +88,12 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
       };
 
     const setColumns =
-      (n: number, keepContent = true) =>
+      (n: number, keepContent = false) =>
       ({ tr, dispatch }: CommandProps) => {
         try {
           const { doc, selection } = tr;
           if (!dispatch) {
+            console.log('no dispatch');
             return;
           }
 
@@ -127,12 +125,12 @@ export const ColumnBlock = Node.create<ColumnBlockOptions>({
           }
 
           const parent = sel.$anchor.parent.type;
-          const canAcceptColumnBlockChild = (parent: NodeType) => {
-            if (!parent.contentMatch.matchType(this.type)) {
+          const canAcceptColumnBlockChild = (par: NodeType) => {
+            if (!par.contentMatch.matchType(this.type)) {
               return false;
             }
 
-            if (!this.options.nestedColumns && parent.name === Column.name) {
+            if (!this.options.nestedColumns && par.name === Column.name) {
               return false;
             }
 
