@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "dist/bundle.cjs.js",
   "umd": "dist/bundle.umd.js",
-  "module": "dist/bundle.esm.js",
+  "module": "dist/bundle.es.js",
   "types": "dist/bundle.es.d.ts",
   "style": "src/index.css",
   "files": [
